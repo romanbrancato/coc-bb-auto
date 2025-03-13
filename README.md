@@ -1,6 +1,11 @@
 # cc-bb-auto
 A simple script to automate builder base farming in Clash of Clans.
 
+
+https://github.com/user-attachments/assets/68ca8fc3-78ce-4a6e-8762-7089a9c8fe75
+
+
+
 ## Setup
 - LDPlayer
 - 960x540 resolution
