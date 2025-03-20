@@ -1,4 +1,5 @@
 from time import sleep
+
 from detection import *
 
 ATTACK_BUTTON = (60, 475)
@@ -12,9 +13,9 @@ class Bot:
     def __init__(self, client):
         self.client = client
 
-    def await_image(self, image_name):
+    def await_images(self, image_name):
         while True:
-            found = locate_image(self.client.capture_screen(),[image_name], 0.9)
+            found = locate_image(self.client.capture_screen(), image_name, 0.9)
             if found: return found
             sleep(0.1)
 
@@ -24,7 +25,7 @@ class Bot:
             sleep(0.2)
             if match := locate_image(self.client.capture_screen(), ["match.png"], 0.9):
                 self.client.device.click(*match)
-                self.await_image("match_begin.png")
+                self.await_images(["match_begin.png"])
                 return
 
     def handle_battle(self):
@@ -38,11 +39,12 @@ class Bot:
     def handle_restart(self):
         self.client.device.app_stop('com.supercell.clashofclans')
         self.client.device.app_start(package_name='com.supercell.clashofclans', activity='com.supercell.titan.GameApp')
-        self.await_image("attack.png")
+        self.await_images(["attack.png"])
 
     def handle_elixir(self):
         while True:
-            if cart := locate_image(self.client.capture_screen(), [ "elixir_cart_full.png", "elixir_cart_empty.png"], 0.5):
+            if cart := locate_image(self.client.capture_screen(),
+                                    ["elixir_cart_empty.png", "elixir_cart_third.png", "elixir_cart_half.png", "elixir_cart_full.png"], 0.6):
                 self.client.device.click(*cart)
             sleep(0.2)
             if collect := locate_image(self.client.capture_screen(), ["elixir_collect.png"], 0.9):
