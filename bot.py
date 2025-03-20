@@ -2,7 +2,6 @@ from time import sleep
 from detection import *
 
 ATTACK_BUTTON = (60, 475)
-ELIXIR_CART = (617, 15)
 HERO_SLOT = (95, 485)
 FIRST_TROOP_SLOT = (180, 485)
 GRASS = (730, 85)
@@ -15,7 +14,7 @@ class Bot:
 
     def await_image(self, image_name):
         while True:
-            found = locate_image(self.client.capture_screen(), image_name, 0.9)
+            found = locate_image(self.client.capture_screen(),[image_name], 0.9)
             if found: return found
             sleep(0.1)
 
@@ -23,7 +22,7 @@ class Bot:
         while True:
             self.client.device.click(*ATTACK_BUTTON)
             sleep(0.2)
-            if match := locate_image(self.client.capture_screen(), "match.png", 0.9):
+            if match := locate_image(self.client.capture_screen(), ["match.png"], 0.9):
                 self.client.device.click(*match)
                 self.await_image("match_begin.png")
                 return
@@ -43,9 +42,10 @@ class Bot:
 
     def handle_elixir(self):
         while True:
-            self.client.device.click(*ELIXIR_CART)
+            if cart := locate_image(self.client.capture_screen(), [ "elixir_cart_full.png", "elixir_cart_empty.png"], 0.5):
+                self.client.device.click(*cart)
             sleep(0.2)
-            if collect := locate_image(self.client.capture_screen(), "elixir_collect.png", 0.9):
+            if collect := locate_image(self.client.capture_screen(), ["elixir_collect.png"], 0.9):
                 self.client.device.click(*collect)
                 self.client.device.shell("input keyevent KEYCODE_BACK")
                 return
