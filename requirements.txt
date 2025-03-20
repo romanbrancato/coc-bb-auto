@@ -1,3 +1,4 @@
 adbutils
 numpy
 aircv
+opencv-python
